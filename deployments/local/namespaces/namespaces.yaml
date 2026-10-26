@@ -1,1 +1,28 @@
-# Kubernetes Namespaces
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault-app
+  labels:
+    app.kubernetes.io/part-of: compliance-vault
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault-data
+  labels:
+    app.kubernetes.io/part-of: compliance-vault
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault-security
+  labels:
+    app.kubernetes.io/part-of: compliance-vault
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vault-observability
+  labels:
+    app.kubernetes.io/part-of: compliance-vault
