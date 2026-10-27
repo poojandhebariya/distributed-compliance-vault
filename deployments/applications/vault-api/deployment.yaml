@@ -19,7 +19,7 @@ spec:
       serviceAccountName: vault-api
       containers:
         - name: vault-api
-          image: vault-api:1.0
+          image: vault-api:1.1
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -49,3 +49,15 @@ spec:
               port: http
             periodSeconds: 10
             failureThreshold: 3
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: vault-api-db-credentials
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: vault-api-db-credentials
+                  key: DB_PASSWORD
+
