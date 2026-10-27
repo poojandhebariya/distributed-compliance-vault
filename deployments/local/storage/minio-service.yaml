@@ -8,9 +8,6 @@ spec:
   selector:
     app: minio
   ports:
-    - name: api
-      port: 9000
-      targetPort: api
-    - name: console
-      port: 9001
-      targetPort: console
+    - name: s3
+      port: 8333
+      targetPort: s3
