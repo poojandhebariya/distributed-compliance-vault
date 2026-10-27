@@ -16,6 +16,7 @@ spec:
       labels:
         app: vault-api
     spec:
+      serviceAccountName: vault-api
       containers:
         - name: vault-api
           image: vault-api:1.0
