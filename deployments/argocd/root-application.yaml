@@ -9,7 +9,7 @@ spec:
   source:
     repoURL: https://github.com/poojandhebariya/distributed-compliance-vault.git
     targetRevision: main
-    path: deployments/applications
+    path: deployments
   destination:
     server: https://kubernetes.default.svc
     namespace: default
