@@ -3,8 +3,11 @@ package com.compliancevault.vaultapi.controller;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.UUID;
 
+import com.compliancevault.vaultapi.service.DocumentPersistenceService;
 import com.compliancevault.vaultapi.storage.S3StorageService;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +22,13 @@ import org.springframework.web.server.ResponseStatusException;
 public class VaultController {
 
     private final S3StorageService storageService;
+    private final DocumentPersistenceService documentPersistenceService;
 
-    public VaultController(S3StorageService storageService) {
+    public VaultController(
+            S3StorageService storageService,
+            DocumentPersistenceService documentPersistenceService) {
         this.storageService = storageService;
+        this.documentPersistenceService = documentPersistenceService;
     }
 
     @GetMapping("/api/v1/vault/status")
@@ -47,14 +54,26 @@ public class VaultController {
         }
 
         try {
+            // Step 1: Store the original file in SeaweedFS raw-zone.
             String objectKey = storageService.store(file);
 
+            // Step 2: Persist metadata and create the outbox event.
+            UUID documentId =
+                    documentPersistenceService.recordUploadedDocument(
+                            file.getOriginalFilename(),
+                            file.getContentType(),
+                            objectKey
+                    );
+
+            // Step 3: Return the successful upload response.
             return ResponseEntity.status(HttpStatus.CREATED).body(
                     Map.of(
                             "status", "uploaded",
+                            "documentId", documentId.toString(),
                             "objectKey", objectKey
                     )
             );
+
         } catch (IOException exception) {
             throw new ResponseStatusException(
                     HttpStatus.INTERNAL_SERVER_ERROR,
