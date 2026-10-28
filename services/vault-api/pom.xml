@@ -67,6 +67,14 @@
 			<artifactId>flyway-database-postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
+        <!-- S3-compatible object storage client for SeaweedFS -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>2.34.5</version>
+        </dependency>
+
 
 		<!-- Existing test dependencies -->
 		<dependency>

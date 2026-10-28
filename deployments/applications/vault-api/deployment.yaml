@@ -60,4 +60,14 @@ spec:
                 secretKeyRef:
                   name: vault-api-db-credentials
                   key: DB_PASSWORD
+            - name: S3_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: vault-api-s3-credentials
+                  key: S3_ACCESS_KEY
+            - name: S3_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: vault-api-s3-credentials
+                  key: S3_SECRET_KEY
 
