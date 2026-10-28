@@ -34,6 +34,8 @@ spec:
                 secretKeyRef:
                   name: minio-root-credentials
                   key: MINIO_ROOT_PASSWORD
+            - name: S3_BUCKET
+              value: "raw-zone,clean-zone,audit-zone"
           volumeMounts:
             - name: minio-data
               mountPath: /data
