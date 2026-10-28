@@ -49,7 +49,7 @@ public class OutboxPublisherService {
                     topic,
                     event.id().toString(),
                     event.payload()
-            ).get(10, TimeUnit.SECONDS);
+            ).get(30, TimeUnit.SECONDS);
 
             repository.markPublished(event.id());
 
