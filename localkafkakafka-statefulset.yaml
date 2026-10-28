@@ -1,0 +1,91 @@
+[1mdiff --git a/deployments/local/kafka/kafka-statefulset.yaml b/deployments/local/kafka/kafka-statefulset.yaml[m
+[1mnew file mode 100644[m
+[1mindex 0000000..4696c2d[m
+[1m--- /dev/null[m
+[1m+++ b/deployments/local/kafka/kafka-statefulset.yaml[m
+[36m@@ -0,0 +1,85 @@[m
+[32m+[m[32mapiVersion: apps/v1[m
+[32m+[m[32mkind: StatefulSet[m
+[32m+[m[32mmetadata:[m
+[32m+[m[32m  name: kafka[m
+[32m+[m[32m  namespace: vault-data[m
+[32m+[m[32mspec:[m
+[32m+[m[32m  serviceName: kafka-headless[m
+[32m+[m[32m  replicas: 1[m
+[32m+[m[32m  selector:[m
+[32m+[m[32m    matchLabels:[m
+[32m+[m[32m      app: kafka[m
+[32m+[m[32m  template:[m
+[32m+[m[32m    metadata:[m
+[32m+[m[32m      labels:[m
+[32m+[m[32m        app: kafka[m
+[32m+[m[32m    spec:[m
+[32m+[m[32m      terminationGracePeriodSeconds: 60[m
+[32m+[m[32m      containers:[m
+[32m+[m[32m        - name: kafka[m
+[32m+[m[32m          image: apache/kafka:4.1.0[m
+[32m+[m[32m          imagePullPolicy: IfNotPresent[m
+[32m+[m[32m          ports:[m
+[32m+[m[32m            - name: broker[m
+[32m+[m[32m              containerPort: 9092[m
+[32m+[m[32m            - name: controller[m
+[32m+[m[32m              containerPort: 9093[m
+[32m+[m[32m          env:[m
+[32m+[m[32m            - name: KAFKA_HEAP_OPTS[m
+[32m+[m[32m              value: "-Xms256M -Xmx256M"[m
+[32m+[m[32m            - name: CLUSTER_ID[m
+[32m+[m[32m              value: "MkU3OEVBNTcwNTJENDM2Qk"[m
+[32m+[m[32m            - name: KAFKA_NODE_ID[m
+[32m+[m[32m              value: "1"[m
+[32m+[m[32m            - name: KAFKA_PROCESS_ROLES[m
+[32m+[m[32m              value: "broker,controller"[m
+[32m+[m[32m            - name: KAFKA_LISTENERS[m
+[32m+[m[32m              value: "PLAINTEXT://:9092,CONTROLLER://:9093"[m
+[32m+[m[32m            - name: KAFKA_ADVERTISED_LISTENERS[m
+[32m+[m[32m              value: "PLAINTEXT://kafka.vault-data.svc.cluster.local:9092"[m
+[32m+[m[32m            - name: KAFKA_CONTROLLER_LISTENER_NAMES[m
+[32m+[m[32m              value: "CONTROLLER"[m
+[32m+[m[32m            - name: KAFKA_INTER_BROKER_LISTENER_NAME[m
+[32m+[m[32m              value: "PLAINTEXT"[m
+[32m+[m[32m            - name: KAFKA_LISTENER_SECURITY_PROTOCOL_MAP[m
+[32m+[m[32m              value: "CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT"[m
+[32m+[m[32m            - name: KAFKA_CONTROLLER_QUORUM_VOTERS[m
+[32m+[m[32m              value: "1@kafka-0.kafka-headless.vault-data.svc.cluster.local:9093"[m
+[32m+[m[32m            - name: KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR[m
+[32m+[m[32m              value: "1"[m
+[32m+[m[32m            - name: KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR[m
+[32m+[m[32m              value: "1"[m
+[32m+[m[32m            - name: KAFKA_TRANSACTION_STATE_LOG_MIN_ISR[m
+[32m+[m[32m              value: "1"[m
+[32m+[m[32m            - name: KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS[m
+[32m+[m[32m              value: "0"[m
+[32m+[m[32m            - name: KAFKA_NUM_PARTITIONS[m
+[32m+[m[32m              value: "1"[m
+[32m+[m[32m            - name: KAFKA_LOG_DIRS[m
+[32m+[m[32m              value: "/var/lib/kafka/data"[m
+[32m+[m[32m          resources:[m
+[32m+[m[32m            requests:[m
+[32m+[m[32m              cpu: 250m[m
+[32m+[m[32m              memory: 256Mi[m
+[32m+[m[32m            limits:[m
+[32m+[m[32m              cpu: "1"[m
+[32m+[m[32m              memory: 512Mi[m
+[32m+[m[32m          startupProbe:[m
+[32m+[m[32m            tcpSocket:[m
+[32m+[m[32m              port: broker[m
+[32m+[m[32m            periodSeconds: 10[m
+[32m+[m[32m            timeoutSeconds: 2[m
+[32m+[m[32m            failureThreshold: 30[m
+[32m+[m[32m          readinessProbe:[m
+[32m+[m[32m            tcpSocket:[m
+[32m+[m[32m              port: broker[m
+[32m+[m[32m            periodSeconds: 10[m
+[32m+[m[32m            timeoutSeconds: 2[m
+[32m+[m[32m            failureThreshold: 3[m
+[32m+[m[32m          volumeMounts:[m
+[32m+[m[32m            - name: kafka-data[m
+[32m+[m[32m              mountPath: /var/lib/kafka/data[m
+[32m+[m[32m      volumes:[m
+[32m+[m[32m        - name: kafka-data[m
+[32m+[m[32m          persistentVolumeClaim:[m
+[32m+[m[32m            claimName: kafka-data[m
