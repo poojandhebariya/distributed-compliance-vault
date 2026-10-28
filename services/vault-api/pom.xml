@@ -82,6 +82,11 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Kafka producer and Spring Boot Kafka auto-configuration -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-kafka</artifactId>
+		</dependency>
 
 		<!-- Existing test dependencies -->
 		<dependency>
