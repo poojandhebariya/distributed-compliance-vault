@@ -6,3 +6,4 @@ resources:
   - kafka-statefulset.yaml
   - kafka-headless-service.yaml
   - kafka-service.yaml
+  - kafka-dlt-topic-job.yaml

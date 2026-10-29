@@ -61,13 +61,20 @@
 			<artifactId>spring-boot-starter-flyway</artifactId>
 		</dependency>
 
+
+		<!-- JSON parsing for Kafka events and audit receipts -->
+		<dependency>
+			<groupId>tools.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
 		<!-- PostgreSQL-specific Flyway support -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-database-postgresql</artifactId>
 			<scope>runtime</scope>
 		</dependency>
-		
+
         <!-- S3-compatible object storage client for SeaweedFS -->
         <dependency>
             <groupId>software.amazon.awssdk</groupId>

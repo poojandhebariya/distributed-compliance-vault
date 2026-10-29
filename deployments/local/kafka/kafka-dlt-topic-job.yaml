@@ -1,0 +1,39 @@
+﻿apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kafka-dlt-topic
+  namespace: vault-data
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/hook-delete-policy: BeforeHookCreation,HookSucceeded
+    argocd.argoproj.io/sync-wave: "-1"
+spec:
+  backoffLimit: 2
+  activeDeadlineSeconds: 600
+  template:
+    metadata:
+      labels:
+        app: kafka-dlt-topic
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: create-dlt
+          image: apache/kafka:4.1.0
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - |
+              set -eu
+              attempt=0
+              until /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka.vault-data.svc.cluster.local:9092 --list >/dev/null 2>&1; do
+                attempt=$((attempt + 1))
+                if [ "$attempt" -ge 60 ]; then
+                  echo "Kafka did not become ready within 5 minutes"
+                  exit 1
+                fi
+                sleep 5
+              done
+              /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka.vault-data.svc.cluster.local:9092 --create --if-not-exists --topic document-events.DLT --partitions 1 --replication-factor 1
+              /opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka.vault-data.svc.cluster.local:9092 --describe --topic document-events.DLT
