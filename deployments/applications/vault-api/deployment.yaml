@@ -72,3 +72,7 @@ spec:
                 secretKeyRef:
                   name: vault-api-s3-credentials
                   key: S3_SECRET_KEY
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
