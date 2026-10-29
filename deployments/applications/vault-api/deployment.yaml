@@ -19,7 +19,7 @@ spec:
       serviceAccountName: vault-api
       containers:
         - name: vault-api
-          image: vault-api:1.7
+          image: vault-api:1.8
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -72,6 +72,3 @@ spec:
                 secretKeyRef:
                   name: vault-api-s3-credentials
                   key: S3_SECRET_KEY
-
-
-
