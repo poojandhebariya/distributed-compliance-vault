@@ -44,12 +44,14 @@ spec:
               path: /actuator/health/readiness
               port: http
             periodSeconds: 10
+            timeoutSeconds: 5
             failureThreshold: 3
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
               port: http
             periodSeconds: 10
+            timeoutSeconds: 5
             failureThreshold: 3
           env:
             - name: DB_USERNAME
