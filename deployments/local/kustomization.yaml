@@ -6,3 +6,5 @@ resources:
   - storage
   - postgres
   - kafka
+
+  - security
