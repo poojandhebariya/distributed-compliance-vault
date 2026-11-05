@@ -17,10 +17,19 @@ spec:
         app: vault-api
     spec:
       serviceAccountName: vault-api
+      automountServiceAccountToken: false
       containers:
         - name: vault-api
-          image: vault-api:1.9
+          image: vault-api:1.10
           imagePullPolicy: IfNotPresent
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - name: http
               containerPort: 8080
@@ -88,3 +97,4 @@ spec:
                 secretKeyRef:
                   name: vault-api-demo-credentials
                   key: VAULT_DEMO_PASSWORD
+

@@ -1,0 +1,6 @@
+﻿Customer: Test User
+Email: test.user@example.com
+Phone: 9876543210
+PAN: ABCDE1234F
+Aadhaar: 123456789012
+This document contains synthetic test data only.
