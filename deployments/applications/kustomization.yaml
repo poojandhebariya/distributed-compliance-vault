@@ -6,3 +6,4 @@ resources:
   - vault-api
   - vault-app-resource-quota.yaml
   - vault-app-limit-range.yaml
+  - network-policies
